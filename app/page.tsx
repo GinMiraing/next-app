@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+
 export default async function Page() {
-  return <div>home</div>;
+  return redirect("/posts");
 }

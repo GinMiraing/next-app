@@ -27,7 +27,7 @@ const Header: React.FC = () => {
     <header className="fixed left-0 right-0 top-0 flex h-20 items-center justify-between border-b bg-background px-6 shadow">
       <Link
         className="font-medium text-xl transition-colors hover:text-foreground"
-        href="/"
+        href="/posts"
       >
         胤·居
       </Link>
