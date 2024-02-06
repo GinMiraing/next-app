@@ -74,15 +74,40 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background;
     font-feature-settings:
       "rlig" 1,
       "calt" 1;
   }
+
   html {
     font-family: "HarmonyOS_Regular", sans-serif;
     font-size: 16px;
     scroll-behavior: smooth;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--foreground);
+  }
+
+  .markdown pre {
+    font-family: ui-monospace, "SFMono-Regular", "Menlo", "Monaco", "Consolas",
+      "Liberation Mono", "Courier New", monospace;
+    @apply overflow-x-auto p-4 text-sm/6 sm:text-base/7;
+  }
+
+  .markdown p {
+    @apply text-justify text-sm/6 sm:text-base/8;
+  }
+
+  .markdown img {
+    @apply h-60 w-full rounded-md object-cover object-center transition-all hover:cursor-pointer hover:brightness-75 sm:h-80;
   }
 }

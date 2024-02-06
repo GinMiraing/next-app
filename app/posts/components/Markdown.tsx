@@ -5,7 +5,7 @@ const Markdown: React.FC<{
 }> = ({ text }) => {
   return (
     <div
-      className="markdown"
+      className="markdown space-y-4"
       dangerouslySetInnerHTML={{ __html: text }}
     ></div>
   );
