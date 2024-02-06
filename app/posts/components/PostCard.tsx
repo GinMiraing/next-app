@@ -1,19 +1,22 @@
+import dayjs from "dayjs";
 import { CalendarDays, Tag } from "lucide-react";
 import Link from "next/link";
 
-const PostCard: React.FC<{
-  title: string;
-  description: string;
-  date: string;
-  coverImage: string;
-  link: string;
-  tag: string;
-}> = ({ title, description, date, coverImage, link, tag }) => {
+import { Post } from "@/lib/type";
+
+const PostCard: React.FC<Omit<Post, "mdFileUrl">> = ({
+  id,
+  title,
+  description,
+  timestamp,
+  tag,
+  coverUrl,
+}) => {
   return (
     <div className="flex flex-col overflow-hidden rounded-lg border shadow sm:flex-row">
       <div className="h-60 shrink-0 sm:h-60 sm:basis-1/3">
         <img
-          src={coverImage}
+          src={coverUrl}
           alt={title}
           loading="lazy"
           className="h-full w-full object-cover"
@@ -21,13 +24,13 @@ const PostCard: React.FC<{
       </div>
       <div className="flex flex-col justify-between space-y-4 p-6">
         <Link
-          href={link}
+          href={`/posts/${id}`}
           className="line-clamp-1 font-medium text-xl transition-colors hover:text-foreground"
         >
           {title}
         </Link>
         <Link
-          href={link}
+          href={`/posts/${id}`}
           className="line-clamp-3 text-justify leading-8 transition-colors hover:text-foreground"
         >
           {description}
@@ -37,7 +40,7 @@ const PostCard: React.FC<{
             <span>
               <CalendarDays className="h-4 w-4" />
             </span>
-            <span>{date}</span>
+            <span>{dayjs.unix(timestamp).format("YYYY-MM-DD")}</span>
           </div>
           <div className="flex items-center space-x-2">
             <span>
