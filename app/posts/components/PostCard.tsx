@@ -4,19 +4,19 @@ import Link from "next/link";
 
 import { Post } from "@/lib/type";
 
-const PostCard: React.FC<Omit<Post, "mdFileUrl">> = ({
+const PostCard: React.FC<Omit<Post, "md_file_url" | "favors">> = ({
   id,
   title,
   description,
-  timestamp,
+  cover_url,
   tag,
-  coverUrl,
+  create_at,
 }) => {
   return (
-    <div className="flex flex-col overflow-hidden rounded-lg border shadow sm:flex-row">
+    <div className="flex flex-col overflow-hidden rounded-lg border bg-background shadow sm:flex-row">
       <div className="h-60 shrink-0 sm:h-60 sm:basis-1/3">
         <img
-          src={coverUrl}
+          src={cover_url}
           alt={title}
           loading="lazy"
           className="h-full w-full object-cover"
@@ -40,7 +40,7 @@ const PostCard: React.FC<Omit<Post, "mdFileUrl">> = ({
             <span>
               <CalendarDays className="h-4 w-4" />
             </span>
-            <span>{dayjs.unix(timestamp).format("YYYY-MM-DD")}</span>
+            <span>{dayjs(create_at).format("YYYY-MM-DD")}</span>
           </div>
           <div className="flex items-center space-x-2">
             <span>

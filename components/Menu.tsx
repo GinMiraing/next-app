@@ -1,40 +1,31 @@
 "use client";
 
-import { Aperture, Pencil, UserRound } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
-const MenuItems: {
-  name: string;
-  link: string;
-  icon: ReactNode;
-}[] = [
-  {
-    name: "文章",
-    link: "/posts",
-    icon: <Pencil className="h-5 w-5" />,
-  },
-  {
-    name: "动态",
-    link: "/moments",
-    icon: <Aperture className="h-5 w-5" />,
-  },
-  {
-    name: "关于",
-    link: "/about",
-    icon: <UserRound className="h-5 w-5" />,
-  },
-];
-
-const Menu: React.FC = () => {
+const Menu: React.FC<{
+  items: {
+    name: string;
+    link: string;
+    icon: ReactNode;
+  }[];
+}> = ({ items }) => {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 grid h-20 grid-cols-3 items-center border-t bg-background sm:hidden">
-      {MenuItems.map((item) => (
+    <nav
+      className={cn(
+        "fixed bottom-0 left-0 right-0 grid h-20 items-center border-t bg-background sm:hidden",
+        {
+          "grid-cols-3": items.length === 3,
+          "grid-cols-4": items.length === 4,
+        },
+      )}
+    >
+      {items.map((item) => (
         <Link
           key={item.name}
           className={cn(
