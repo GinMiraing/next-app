@@ -2,8 +2,37 @@ export type Post = {
   id: number;
   title: string;
   description: string;
-  timestamp: number;
+  cover_url: string;
   tag: string;
-  mdFileUrl: string;
-  coverUrl: string;
+  create_at: Date;
+  md_file_url: string;
+  favor: number;
+};
+
+export type Moment = {
+  id: number;
+  content: string;
+  image_url: string;
+  tag: string;
+  create_at: Date;
+  comments: {
+    id: number;
+    user_name: string;
+    user_email_md5: string;
+    user_site_url: string;
+    user_tag: string;
+    content: string;
+    create_at: Date;
+    replies: {
+      id: number;
+      reply_id: number;
+      reply_name: string;
+      user_name: string;
+      user_email_md5: string;
+      user_site_url: string;
+      user_tag: string;
+      content: string;
+      create_at: Date;
+    }[];
+  }[];
 };
