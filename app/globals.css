@@ -5,7 +5,8 @@
 @layer base {
   :root {
     --background: #fff;
-    --foreground: #fca5a5;
+    --foreground: #ef7a82;
+    --body: #eaeaef;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
@@ -19,7 +20,7 @@
     --card: 0 0% 100%;
     --card-foreground: 222.2 47.4% 11.2%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: #ef7a82;
     --primary-foreground: 210 40% 98%;
 
     --secondary: 210 40% 96.1%;
@@ -31,7 +32,7 @@
     --destructive: 0 100% 50%;
     --destructive-foreground: 210 40% 98%;
 
-    --ring: 215 20.2% 65.1%;
+    --ring: #ef7a82;
 
     --radius: 0.5rem;
   }
@@ -76,7 +77,7 @@
   }
 
   body {
-    @apply bg-background;
+    background-color: var(--body);
     font-feature-settings:
       "rlig" 1,
       "calt" 1;

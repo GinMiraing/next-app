@@ -1,0 +1,90 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id         Int    @id @default(autoincrement())
+  name       String @default("") @db.VarChar(255)
+  email      String @unique @default("") @db.VarChar(255)
+  email_md5  String @default("") @db.Char(32)
+  password   String @default("") @db.Char(64)
+  salt       String @default("") @db.Char(8)
+  avatar_url String @default("") @db.VarChar(255)
+}
+
+model Comment {
+  id             Int      @id @default(autoincrement())
+  is_post        Boolean  @default(false)
+  attach_id      Int      @default(0) @db.UnsignedInt
+  user_name      String   @default("") @db.VarChar(255)
+  user_email_md5 String   @default("") @db.Char(32)
+  user_site_url  String   @default("") @db.VarChar(255)
+  user_tag       String   @default("") @db.VarChar(255)
+  content        String   @db.Text
+  create_at      DateTime @default(now())
+  update_at      DateTime @updatedAt
+  published      Boolean  @default(true)
+}
+
+model Friend {
+  id          Int     @id @default(autoincrement())
+  name        String  @default("") @db.VarChar(255)
+  link        String  @default("") @db.VarChar(255)
+  avatar      String  @default("") @db.VarChar(255)
+  description String  @default("") @db.VarChar(255)
+  category    String  @default("") @db.VarChar(255)
+  published   Boolean @default(true)
+  sorting     Int     @default(0) @db.UnsignedInt
+}
+
+model Moment {
+  id        Int      @id @default(autoincrement())
+  content   String   @db.Text
+  image_url String   @db.Text
+  tag       String   @default("") @db.VarChar(255)
+  create_at DateTime @default(now())
+  update_at DateTime @updatedAt
+  published Boolean  @default(true)
+}
+
+model Post {
+  id          Int      @id @default(autoincrement())
+  title       String   @default("") @db.VarChar(255)
+  description String   @default("") @db.VarChar(255)
+  cover_url   String   @default("") @db.VarChar(255)
+  md_file_url String   @default("") @db.VarChar(255)
+  tag         String   @default("") @db.VarChar(255)
+  create_at   DateTime @default(now())
+  update_at   DateTime @updatedAt
+  published   Boolean  @default(true)
+}
+
+model Reply {
+  id             Int      @id @default(autoincrement())
+  comment_id     Int      @default(0) @db.UnsignedInt
+  reply_id       Int      @default(0) @db.UnsignedInt
+  reply_name     String   @default("") @db.VarChar(255)
+  user_name      String   @default("") @db.VarChar(255)
+  user_email_md5 String   @default("") @db.Char(32)
+  user_site_url  String   @default("") @db.VarChar(255)
+  user_tag       String   @default("") @db.VarChar(255)
+  content        String   @db.Text
+  create_at      DateTime @default(now())
+  update_at      DateTime @updatedAt
+  published      Boolean  @default(true)
+}
+
+model User {
+  id        Int     @id @default(autoincrement())
+  name      String  @default("") @db.VarChar(255)
+  email     String  @unique @default("") @db.VarChar(255)
+  email_md5 String  @default("") @db.Char(32)
+  site_url  String  @default("") @db.VarChar(255)
+  tag       String  @default("") @db.VarChar(255)
+  banned    Boolean @default(false)
+}
