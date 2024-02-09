@@ -1,85 +1,18 @@
 import { Loader2 } from "lucide-react";
 import { Suspense } from "react";
 
+import { getPosts } from "@/lib/prisma.server";
 import { Post } from "@/lib/type";
 import { sleep } from "@/lib/utils";
 
 import LoadMore from "./components/LoadMore";
 import PostCard from "./components/PostCard";
 
-const mocks: Post[] = [
-  {
-    id: 1,
-    title: "mock 1",
-    description: "mock 1",
-    timestamp: 1707184711,
-    tag: "test",
-    mdFileUrl: "",
-    coverUrl: "https://placeholder.com/300x200",
-  },
-  {
-    id: 2,
-    title: "mock 2",
-    description: "mock 2",
-    timestamp: 1707184711,
-    tag: "test",
-    mdFileUrl: "",
-    coverUrl: "https://placeholder.com/300x200",
-  },
-  {
-    id: 3,
-    title: "mock 3",
-    description: "mock 3",
-    timestamp: 1707184711,
-    tag: "test",
-    mdFileUrl: "",
-    coverUrl: "https://placeholder.com/300x200",
-  },
-  {
-    id: 4,
-    title: "mock 4",
-    description: "mock 4",
-    timestamp: 1707184711,
-    tag: "test",
-    mdFileUrl: "",
-    coverUrl: "https://placeholder.com/300x200",
-  },
-  {
-    id: 5,
-    title: "mock 5",
-    description: "mock 5",
-    timestamp: 1707184711,
-    tag: "test",
-    mdFileUrl: "",
-    coverUrl: "https://placeholder.com/300x200",
-  },
-  {
-    id: 6,
-    title: "mock 6",
-    description: "mock 6",
-    timestamp: 1707184711,
-    tag: "test",
-    mdFileUrl: "",
-    coverUrl: "https://placeholder.com/300x200",
-  },
-  {
-    id: 7,
-    title: "mock 7",
-    description: "mock 7",
-    timestamp: 1707184711,
-    tag: "test",
-    mdFileUrl: "",
-    coverUrl: "https://placeholder.com/300x200",
-  },
-];
-
 export default async function Page({
   searchParams,
 }: {
   searchParams: { size?: string };
 }) {
-  const posts = mocks.slice(0, Number(searchParams.size) || 1);
-
   return (
     <Suspense
       fallback={
@@ -89,18 +22,18 @@ export default async function Page({
         </div>
       }
     >
-      <StreamLoader posts={posts} />
+      <StreamLoader size={searchParams.size ? Number(searchParams.size) : 1} />
     </Suspense>
   );
 }
 
 const StreamLoader: React.FC<{
-  posts: Post[];
-}> = async ({ posts }) => {
-  await sleep(1000);
+  size: number;
+}> = async ({ size }) => {
+  const { posts } = await getPosts(size);
 
   return (
-    <div className="py-10">
+    <div className="py-4 sm:py-10">
       <div className="flex flex-col space-y-8">
         {posts.map((post) => (
           <PostCard

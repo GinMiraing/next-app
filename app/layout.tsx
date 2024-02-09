@@ -1,5 +1,11 @@
+import { Aperture, LayoutList, Pencil, UserRound } from "lucide-react";
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 
+import { Toaster } from "@/lib/hooks/Toast/provider";
+import RedisClient from "@/lib/redis";
+
+import { CommentProvider } from "@/components/Comment/provider";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import Menu from "@/components/Menu";
@@ -12,11 +18,54 @@ export const metadata: Metadata = {
   icons: "/favicon.ico",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const menuItems = [
+    {
+      name: "文章",
+      link: "/posts",
+      icon: <Pencil className="h-5 w-5" />,
+    },
+    {
+      name: "动态",
+      link: "/moments",
+      icon: <Aperture className="h-5 w-5" />,
+    },
+    {
+      name: "关于",
+      link: "/about",
+      icon: <UserRound className="h-5 w-5" />,
+    },
+  ];
+
+  const session = cookies().get("SESSION");
+  let isLogin = false;
+  let userData:
+    | {
+        id: number;
+        name: string;
+        email_md5: string;
+        avatar: string;
+      }
+    | undefined = undefined;
+
+  if (session?.value) {
+    const data = await RedisClient.get(`admin:${session.value}`);
+
+    if (data) {
+      menuItems.push({
+        name: "管理",
+        link: "/dash",
+        icon: <LayoutList className="h-5 w-5" />,
+      });
+      isLogin = true;
+      userData = JSON.parse(data);
+    }
+  }
+
   return (
     <html lang="zh-CN">
       <head>
@@ -30,12 +79,17 @@ export default function RootLayout({
         />
       </head>
       <body className="font-regular">
-        <Header />
+        <Header
+          items={menuItems}
+          isLogin={isLogin}
+          userData={userData}
+        />
         <main className="mx-auto min-h-[calc(100vh-5rem)] w-full max-w-4xl px-4 pb-20 pt-20 sm:pb-0">
-          {children}
+          <CommentProvider>{children}</CommentProvider>
         </main>
         <Footer />
-        <Menu />
+        <Menu items={menuItems} />
+        <Toaster />
       </body>
     </html>
   );
