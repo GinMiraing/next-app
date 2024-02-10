@@ -1,34 +1,52 @@
+import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import axios from "axios";
-import { CalendarDays, Tag } from "lucide-react";
-import rehypeSanitize from "rehype-sanitize";
-import rehypeShiki from "rehype-shiki";
-import rehypeStringify from "rehype-stringify";
+import { CalendarDays, Loader2, Tag } from "lucide-react";
+import { MDXRemote } from "next-mdx-remote/rsc";
+import { Suspense } from "react";
+import rehypeHighlight from "rehype-highlight";
 import remarkGfm from "remark-gfm";
-import remarkParse from "remark-parse";
-import remarkRehype from "remark-rehype";
 import remarkUnwrapImages from "remark-unwrap-images";
-import { unified } from "unified";
 
-import Markdown from "../components/Markdown";
+import CommentCard from "../components/CommentCard";
+
+const components = {
+  img: (props: any) => (
+    <a
+      href={props.src}
+      data-fancybox
+      className="block"
+    >
+      <img
+        src={`${props.src}/post_thumb`}
+        alt={props.alt}
+      />
+    </a>
+  ),
+};
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const text = await axios.get("https://cdn.zengjunyin.com/posts/23.mdx", {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-[calc(100vh-10rem)] items-center justify-center">
+          <Loader2 className="mr-2 animate-spin text-foreground" />
+          加载中...
+        </div>
+      }
+    >
+      <StreamLoader id={params.id || "1"} />
+    </Suspense>
+  );
+}
+
+const StreamLoader: React.FC<{
+  id: string;
+}> = async ({ id }) => {
+  const text = await axios.get(`https://cdn.zengjunyin.com/posts/${id}.mdx`, {
     headers: {
       "Content-Type": "text/markdown",
     },
   });
-
-  const file = await unified()
-    .use(remarkParse)
-    .use(remarkUnwrapImages)
-    .use(remarkGfm)
-    .use(remarkRehype)
-    .use(rehypeSanitize)
-    .use(rehypeStringify)
-    .use(rehypeShiki, {
-      theme: "monokai",
-    })
-    .process(text.data);
 
   return (
     <div className="space-y-8 py-10">
@@ -54,7 +72,19 @@ export default async function Page({ params }: { params: { id: string } }) {
           alt=""
         />
       </div>
-      <Markdown text={file.value.toString()} />
+      <div className="markdown space-y-6">
+        <MDXRemote
+          source={text.data}
+          components={components}
+          options={{
+            mdxOptions: {
+              remarkPlugins: [remarkGfm, remarkUnwrapImages],
+              rehypePlugins: [rehypeHighlight],
+            },
+          }}
+        />
+      </div>
+      <CommentCard />
     </div>
   );
-}
+};

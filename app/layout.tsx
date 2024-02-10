@@ -96,6 +96,10 @@ export default async function RootLayout({
           rel="stylesheet"
           href="https://s1.hdslb.com/bfs/static/jinkela/long/font/regular.css"
         />
+        <link
+          rel="stylesheet"
+          href="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/highlight.js/11.4.0/styles/github-dark-dimmed.min.css"
+        ></link>
       </head>
       <body className="font-regular">
         <UserProvider userData={userData}>
