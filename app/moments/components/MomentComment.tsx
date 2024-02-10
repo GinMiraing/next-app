@@ -6,6 +6,7 @@ import { useCallback } from "react";
 
 import { useComment } from "@/components/Comment/hook";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/UI/Avatar";
+import { useUser } from "@/components/User/hook";
 
 const MomentComment: React.FC<{
   data: {
@@ -30,6 +31,7 @@ const MomentComment: React.FC<{
   }[];
 }> = ({ data }) => {
   const { setIsPost, setIsReply, setOpen, setPayload } = useComment();
+  const { isLogin, setUserFormOpen } = useUser();
 
   const handlerReply = useCallback(
     (payload: {
@@ -39,12 +41,17 @@ const MomentComment: React.FC<{
       replyEmailMD5: string;
       replyContent: string;
     }) => {
+      if (!isLogin) {
+        setUserFormOpen(true);
+        return;
+      }
+
       setIsPost(false);
       setIsReply(true);
       setPayload(payload);
       setOpen(true);
     },
-    [],
+    [isLogin],
   );
 
   return (
@@ -56,7 +63,7 @@ const MomentComment: React.FC<{
           id={comment.id.toString()}
         >
           <div className="flex space-x-3">
-            <Avatar className="h-11 w-11 rounded-md border">
+            <Avatar className="h-11 w-11 rounded-md">
               <AvatarImage
                 src={`https://cravatar.cn/avatar/${comment.user_email_md5}`}
                 alt={comment.user_email_md5}
@@ -101,7 +108,7 @@ const MomentComment: React.FC<{
               id={reply.id.toString()}
             >
               <div className="flex space-x-3">
-                <Avatar className="h-11 w-11 rounded-md border">
+                <Avatar className="h-11 w-11 rounded-md">
                   <AvatarImage
                     src={`https://cravatar.cn/avatar/${reply.user_email_md5}`}
                     alt={reply.user_email_md5}

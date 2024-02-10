@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 
 import { useComment } from "@/components/Comment/hook";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/UI/Avatar";
+import { useUser } from "@/components/User/hook";
 
 import MomentComment from "./MomentComment";
 
@@ -18,15 +19,21 @@ const MomentCard: React.FC<{
   data: Moment;
 }> = ({ data }) => {
   const { setOpen, setIsPost, setIsReply, setPayload } = useComment();
+  const { isLogin, setUserFormOpen } = useUser();
 
   const handleComment = useCallback(() => {
+    if (!isLogin) {
+      setUserFormOpen(true);
+      return;
+    }
+
     setIsPost(false);
     setIsReply(false);
     setPayload({
       attachId: data.id,
     });
     setOpen(true);
-  }, [data]);
+  }, [data, isLogin]);
 
   const images = data.image_url.split(",").filter((str) => str.length > 0);
 
@@ -59,7 +66,7 @@ const MomentCard: React.FC<{
   }, []);
 
   return (
-    <div className="w-full overflow-hidden rounded-md border bg-background shadow">
+    <div className="w-full overflow-hidden rounded-md border bg-background shadow duration-700 animate-in fade-in">
       <div
         className={cn("flex flex-col space-y-8 p-6", {
           "border-b-2 border-dashed border-gray-400": data.comments.length > 0,

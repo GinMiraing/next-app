@@ -17,7 +17,7 @@ export default async function Page({
     <Suspense
       fallback={
         <div className="flex min-h-[calc(100vh-10rem)] items-center justify-center">
-          <Loader2 className="mr-2 animate-spin" />
+          <Loader2 className="mr-2 animate-spin text-foreground" />
           加载中...
         </div>
       }

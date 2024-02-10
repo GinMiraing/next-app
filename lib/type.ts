@@ -6,7 +6,6 @@ export type Post = {
   tag: string;
   create_at: Date;
   md_file_url: string;
-  favor: number;
 };
 
 export type Moment = {
@@ -35,4 +34,13 @@ export type Moment = {
       create_at: Date;
     }[];
   }[];
+};
+
+export type UserProfile = {
+  name: string;
+  emailMdD5: string;
+  siteUrl: string;
+  tag: string;
+  commentCount: number;
+  replyCount: number;
 };

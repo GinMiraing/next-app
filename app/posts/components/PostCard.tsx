@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { Post } from "@/lib/type";
 
-const PostCard: React.FC<Omit<Post, "md_file_url" | "favors">> = ({
+const PostCard: React.FC<Omit<Post, "md_file_url">> = ({
   id,
   title,
   description,
